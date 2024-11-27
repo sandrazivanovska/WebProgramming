@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title th:text="${song} != null ? 'Edit Song' : 'Add New Song'">Add or Edit Song</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+
+    .form-container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    .form-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #343a40;
+    }
+
+    .form-control {
+      border: 1px solid #ced4da;
+      border-radius: 8px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      color: #495057;
+    }
+
+    .btn-submit {
+      background: linear-gradient(90deg, #6a11cb, #2575fc);
+      border: none;
+      color: #fff;
+      font-weight: bold;
+      padding: 10px;
+      border-radius: 8px;
+      width: 100%;
+    }
+
+    .btn-submit:hover {
+      background: linear-gradient(90deg, #2575fc, #6a11cb);
+    }
+
+    .btn-back {
+      background: #ced4da;
+      border: none;
+      color: #495057;
+      font-weight: bold;
+      padding: 10px;
+      border-radius: 8px;
+      width: 100%;
+    }
+
+    .btn-back:hover {
+      background: #adb5bd;
+    }
+
+    .error-message {
+      color: #dc3545;
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <!-- Динамичен наслов -->
+  <h1 class="form-title" th:text="${song} != null ? 'Edit Song' : 'Add New Song'"></h1>
+
+  <form th:method="POST" th:action="@{/songs/add}">
+    <input id="id" type="hidden" name="id" th:value="(${song} != null ? ${song.getId()} : '')">
+    <div class="form-group mb-3">
+      <label for="trackId">Track ID</label>
+      <input type="text" class="form-control" id="trackId" name="trackId"
+             th:value="(${song} != null ? ${song.getTrackId()} : '')" required placeholder="Track ID">
+    </div>
+    <div class="form-group mb-3">
+      <label for="title">Song Title</label>
+      <input type="text" class="form-control" id="title" name="title"
+             th:value="(${song} != null ? ${song.getTitle()} : '')" placeholder="Song Title">
+    </div>
+    <div class="form-group mb-3">
+      <label for="genre">Genre</label>
+      <input type="text" class="form-control" id="genre" name="genre"
+             th:value="(${song} != null ? ${song.getGenre()} : '')" placeholder="Genre">
+    </div>
+    <div class="form-group mb-3">
+      <label for="release-year">Release Year</label>
+      <input type="text" class="form-control" id="release-year" name="releaseYear"
+             th:value="(${song} != null ? ${song.getReleaseYear()} : '')" placeholder="Release Year">
+    </div>
+    <div class="form-group mb-3">
+      <label>Albums</label>
+      <select name="albumId" class="form-control">
+        <option th:if="${song} != null"
+                th:selected="${song.getAlbum() != null &&
+                        song.getAlbum().getId() == album.getId()}"
+                th:each="album : ${albums}" th:value="${album.getId()}" th:text="${album.getName()}">
+        </option>
+        <option th:if="${song} == null"
+                th:each="album : ${albums}" th:value="${album.getId()}" th:text="${album.getName()}">
+        </option>
+      </select>
+    </div>
+    <th:block th:if="${hasError}">
+      <div class="error-message" th:text="${error}"></div>
+    </th:block>
+    <button id="submit" type="submit" class="btn btn-submit mt-3" th:text="${song} != null ? 'Update Song' : 'Add Song'"></button>
+    <a type="button" class="btn btn-back mt-2" href="/songs">Back</a>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

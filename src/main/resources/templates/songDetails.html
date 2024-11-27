@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Song Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      background-color: #343a40;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      padding: 15px;
+    }
+
+    .table-details th {
+      width: 30%;
+      text-align: left;
+      background-color: #f1f1f1;
+    }
+
+    .btn-back {
+      background-color: #6c757d;
+      color: white;
+      font-weight: bold;
+      border-radius: 6px;
+    }
+
+    .btn-back:hover {
+      background-color: #5a6268;
+    }
+  </style>
+</head>
+<body>
+<div class="container py-5">
+  <div class="card">
+    <div class="card-header">
+      Song Details
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered table-details">
+        <tbody>
+        <tr>
+          <th>Track ID</th>
+          <td th:text="${trackId}">[Track ID]</td>
+        </tr>
+        <tr>
+          <th>Title</th>
+          <td th:text="${songTitle}">[Song Title]</td>
+        </tr>
+        <tr>
+          <th>Genre</th>
+          <td th:text="${songGenre}">[Genre]</td>
+        </tr>
+        <tr>
+          <th>Release Year</th>
+          <td th:text="${songRelease}">[Year]</td>
+        </tr>
+        <tr>
+          <th>Performers</th>
+          <td>
+            <ul class="list-unstyled mb-0" th:each="artist : ${songPerformers}">
+              <li th:text="|${artist.firstName} ${artist.lastName}|">Performer Name</li>
+            </ul>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-end mt-4">
+        <a href="/songs" class="btn btn-back">Back to Songs</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

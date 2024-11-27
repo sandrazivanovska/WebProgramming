@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Select Artist</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 40px;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #343a40;
+            color: white;
+            text-align: left;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .track-id-box {
+            background-color: #e9ecef;
+            color: #343a40;
+            border-radius: 5px;
+            font-weight: bold;
+            padding: 10px;
+            width: 150px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .btn-select {
+            background-color: #6c757d;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+        }
+
+        .btn-select:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+            margin-right: 15px;
+        }
+
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #343a40;
+        }
+
+        .table-bordered {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div>Select Artist to Add as Performer</div>
+            <div class="track-id-box" th:text="'Track ID: ' + ${trackId}">Track ID: No track selected</div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Artist Selection Section -->
+                <div class="col-md-8">
+                    <h4 class="section-title">Select Artist:</h4>
+                    <form th:method="POST" th:action="@{/artist}">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-dark">
+                            <tr>
+                                <th>Select</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="artist : ${artists}">
+                                <td>
+                                    <input type="radio" name="artistId" th:value="${artist.getId()}" required>
+                                </td>
+                                <td th:text="${artist.firstName}">Artist First Name</td>
+                                <td th:text="${artist.lastName}">Artist Last Name</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-between mt-3">
+                            <a href="/songs" class="btn btn-back">Back to Songs</a>
+                            <button type="submit" class="btn btn-select">Select</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
