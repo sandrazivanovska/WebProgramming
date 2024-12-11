@@ -36,6 +36,29 @@
       <h3 class="mb-0">Home Page For Songs</h3>
     </div>
     <div class="card-body">
+      <!-- Form to filter songs by album -->
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <form th:action="@{/songs}" method="get">
+            <div class="form-group">
+              <label for="albumSelect">Filter Songs by Album</label>
+              <select id="albumSelect" name="albumId" class="form-control">
+                <option th:each="album : ${albums}"
+                        th:value="${album.id}"
+                        th:text="${album.name}"
+                        th:selected="${album.id == selectedAlbumId}">
+                  Select Album
+                </option>
+              </select>
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+              <button type="submit" class="btn btn-custom">Filter</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Table for displaying all songs -->
       <div class="table-responsive">
         <table class="table table-bordered table-hover">
           <thead class="table-light">
@@ -75,6 +98,36 @@
           </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Table for filtered songs if album is selected -->
+      <div th:if="${selectedAlbumId != null}" class="mt-4">
+        <h5>Filtered Songs</h5>
+        <div th:if="${filteredSongs == null || filteredSongs.isEmpty()}">
+          <p class="text-danger">No songs found for the selected album.</p>
+        </div>
+        <div th:if="${filteredSongs != null && !filteredSongs.isEmpty()}">
+          <table class="table table-bordered table-hover">
+            <thead class="table-light">
+            <tr>
+              <th>Track ID</th>
+              <th>Title</th>
+              <th>Genre</th>
+              <th>Release Year</th>
+              <th>Album</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="song : ${filteredSongs}">
+              <td th:text="${song.trackId}"></td>
+              <td th:text="${song.title}"></td>
+              <td th:text="${song.genre}"></td>
+              <td th:text="${song.releaseYear}"></td>
+              <td th:text="${song.album.name}"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Action Buttons -->

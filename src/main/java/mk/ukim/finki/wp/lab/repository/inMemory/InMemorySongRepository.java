@@ -1,4 +1,4 @@
-package mk.ukim.finki.wp.lab.repository;
+package mk.ukim.finki.wp.lab.repository.inMemory;
 
 import mk.ukim.finki.wp.lab.model.Album;
 import mk.ukim.finki.wp.lab.model.Artist;
@@ -11,11 +11,11 @@ import java.util.Optional;
 
 @Repository
 
-public class SongRepository {
+public class InMemorySongRepository {
     private List<Song> songs;
-    private final AlbumRepository albumRepository;
+    private final InMemoryAlbumRepository albumRepository;
 
-    public SongRepository(AlbumRepository albumRepository) {
+    public InMemorySongRepository(InMemoryAlbumRepository albumRepository) {
         this.albumRepository = albumRepository;
         List<Album> albums = albumRepository.findAll();
 
@@ -39,10 +39,13 @@ public class SongRepository {
                 .orElse(null);
     }
 
-    public Artist addArtistToSong(Artist artist, Song song){
-        song.getPerformers().add(artist);
+    public Artist addArtistToSong(Artist artist, Song song) {
+        if (!song.getPerformers().contains(artist)) {
+            song.getPerformers().add(artist);
+        }
         return artist;
     }
+
 
     public List<Song> findByTitle(String title){
         return songs.stream()
