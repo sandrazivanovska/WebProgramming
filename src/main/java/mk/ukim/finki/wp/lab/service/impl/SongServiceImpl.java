@@ -41,7 +41,6 @@ public class SongServiceImpl implements SongService {
 
     @Override
     public Artist addArtistToSong(Artist a, Song s) {
-        // Fetch the song and artist from the database
         Long songId = s.getId();
         Long artistId = a.getId();
 
@@ -50,17 +49,14 @@ public class SongServiceImpl implements SongService {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new ArtistNotFoundException(artistId));
 
-        // Add the artist to the song's performers list
         if (!song.getPerformers().contains(artist)) {
             song.getPerformers().add(artist);
         }
 
-        // Add the song to the artist's songs list
         if (!artist.getSongs().contains(song)) {
             artist.getSongs().add(song);
         }
 
-        // Save the changes
         songRepository.save(song);
         artistRepository.save(artist);
 

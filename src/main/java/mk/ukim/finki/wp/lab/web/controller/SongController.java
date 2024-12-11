@@ -33,16 +33,12 @@ public class SongController {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
-
-        // Fetch all albums for the dropdown
         List<Album> albums = this.albumService.findAll();
         model.addAttribute("albums", albums);
 
-        // Fetch all songs for the main table
         List<Song> songs = this.songService.listSongs();
         model.addAttribute("songs", songs);
 
-        // Fetch filtered songs if albumId is provided
         if (albumId != null) {
             List<Song> filteredSongs = this.songService.findByAlbumId(albumId);
             model.addAttribute("filteredSongs", filteredSongs);
