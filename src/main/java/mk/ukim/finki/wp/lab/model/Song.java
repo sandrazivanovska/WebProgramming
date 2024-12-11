@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp.lab.model;
 
 import jakarta.persistence.*;
+import mk.ukim.finki.wp.lab.model.Review;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -31,6 +32,9 @@ public class Song {
 
     @ManyToOne
     private Album album;
+
+    @OneToMany
+    private List<Review> reviews;
 
 
     public Song() {
