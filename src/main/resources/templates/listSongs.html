@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8"/>
   <title>Home Page For Songs</title>
@@ -36,6 +36,22 @@
       <h3 class="mb-0">Home Page For Songs</h3>
     </div>
     <div class="card-body">
+
+      <!-- Login/Logout Buttons -->
+      <div class="d-flex justify-content-end mb-4">
+        <!-- Login Button for Non-Authenticated Users -->
+        <th:block sec:authorize="isAnonymous()">
+          <a th:href="@{/login}" class="btn btn-custom">Login</a>
+        </th:block>
+
+        <!-- Logout Button for Authenticated Users -->
+        <th:block sec:authorize="isAuthenticated()">
+          <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-danger ms-2">Logout</button>
+          </form>
+        </th:block>
+      </div>
+
       <!-- Form to filter songs by album -->
       <div class="row mb-4">
         <div class="col-md-12">
@@ -69,7 +85,10 @@
             <th scope="col">Genre</th>
             <th scope="col">Release Year</th>
             <th scope="col">Album</th>
-            <th scope="col" class="text-center">Actions</th>
+            <!-- Actions column visible only for ADMIN -->
+            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+              <th scope="col" class="text-center">Actions</th>
+            </th:block>
           </tr>
           </thead>
           <tbody>
@@ -82,57 +101,35 @@
             <td th:text="${song.genre}"></td>
             <td th:text="${song.releaseYear}"></td>
             <td th:text="${song.album.name}"></td>
-            <td class="text-center">
-              <!-- Edit button -->
-              <a th:href="@{/songs/edit-form/{id}(id=${song.id})}" class="btn btn-sm btn-custom" title="Edit">
-                <i class="fas fa-pen"></i>
-              </a>
-              <!-- Delete form -->
-              <form th:action="@{/songs/delete/{id}(id=${song.id})}" th:method="post" style="display:inline;">
-                <input type="hidden" name="_method" value="DELETE">
-                <button type="submit" class="btn btn-sm btn-danger" title="Delete">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </form>
-            </td>
+            <!-- Actions buttons visible only for ADMIN -->
+            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+              <td class="text-center">
+                <!-- Edit button -->
+                <a th:href="@{/songs/edit-form/{id}(id=${song.id})}" class="btn btn-sm btn-custom" title="Edit">
+                  <i class="fas fa-pen"></i>
+                </a>
+                <!-- Delete form -->
+                <form th:action="@{/songs/delete/{id}(id=${song.id})}" th:method="post" style="display:inline;">
+                  <input type="hidden" name="_method" value="DELETE">
+                  <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </form>
+              </td>
+            </th:block>
           </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Table for filtered songs if album is selected -->
-      <div th:if="${selectedAlbumId != null}" class="mt-4">
-        <h5>Filtered Songs</h5>
-        <div th:if="${filteredSongs == null || filteredSongs.isEmpty()}">
-          <p class="text-danger">No songs found for the selected album.</p>
-        </div>
-        <div th:if="${filteredSongs != null && !filteredSongs.isEmpty()}">
-          <table class="table table-bordered table-hover">
-            <thead class="table-light">
-            <tr>
-              <th>Track ID</th>
-              <th>Title</th>
-              <th>Genre</th>
-              <th>Release Year</th>
-              <th>Album</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="song : ${filteredSongs}">
-              <td th:text="${song.trackId}"></td>
-              <td th:text="${song.title}"></td>
-              <td th:text="${song.genre}"></td>
-              <td th:text="${song.releaseYear}"></td>
-              <td th:text="${song.album.name}"></td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
       <!-- Action Buttons -->
       <div class="d-flex justify-content-between mt-4">
-        <a th:href="@{/songs/add-form}" class="btn btn-add">Add New Song</a>
+        <!-- Add button visible only for ADMIN -->
+        <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+          <a th:href="@{/songs/add-form}" class="btn btn-add">Add New Song</a>
+        </th:block>
+
+        <!-- Select button available for all users -->
         <form id="selectSongForm" th:action="@{/songs/selected}" th:method="post">
           <button type="submit" class="btn btn-custom">Select</button>
         </form>
