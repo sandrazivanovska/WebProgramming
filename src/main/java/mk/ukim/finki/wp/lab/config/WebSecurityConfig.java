@@ -30,28 +30,29 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(AbstractHttpConfigurer::disable) // Оневозможено за тестирање
+                .csrf(AbstractHttpConfigurer::disable)
                 .headers((headers) -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin) // Дозволено за H2 конзолата
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                 )
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/songs", "/artist", "/songDetails", "/songs/selected").permitAll() // Дозволено за сите
-                        .requestMatchers("/songs/add", "/songs/edit/**", "/songs/delete/**").hasRole("ADMIN") // Само за ADMIN
-                        .anyRequest().authenticated() // Сите други барања бараат најава
+                        .requestMatchers("/", "/login").permitAll()
+                        .requestMatchers("/songs/add", "/songs/edit/**", "/songs/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/songs", "/artist", "/songDetails", "/songs/selected").hasAnyRole("USER", "ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .permitAll() // Овозможете пристап до автоматската форма
-                        .defaultSuccessUrl("/songs", true) // Пренасочување по успешна најава
+                        .permitAll()
+                        .defaultSuccessUrl("/songs", true)
                 )
                 .logout((logout) -> logout
-                        .logoutUrl("/logout") // URL за одјава
+                        .logoutUrl("/logout")
                         .clearAuthentication(true)
                         .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID") // Избриши сесијата
-                        .logoutSuccessUrl("/songs") // Пренасочување по одјава
+                        .deleteCookies("JSESSIONID")
+                        .logoutSuccessUrl("/songs")
                 )
                 .exceptionHandling((ex) -> ex
-                        .accessDeniedPage("/access_denied") // Страница за забранет пристап
+                        .accessDeniedPage("/access_denied")
                 );
 
         return http.build();
