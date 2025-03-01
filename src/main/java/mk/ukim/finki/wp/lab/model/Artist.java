@@ -1,5 +1,5 @@
 package mk.ukim.finki.wp.lab.model;
-
+//add comment
 import jakarta.persistence.*;
 import lombok.Data;
 
