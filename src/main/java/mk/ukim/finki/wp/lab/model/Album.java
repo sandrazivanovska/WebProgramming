@@ -2,9 +2,11 @@ package mk.ukim.finki.wp.lab.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@NoArgsConstructor
 @Data
 @Entity
 public class Album {
@@ -20,9 +22,6 @@ public class Album {
 
     @OneToMany(mappedBy = "album")
     private List<Song> songs;
-
-    public Album() {
-    }
 
     public Album(String name, String genre, String releaseYear) {
         this.name = name;
